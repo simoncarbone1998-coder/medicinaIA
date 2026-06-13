@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import Landing from './pages/Landing'
-import Dashboard from './pages/Dashboard'
+import Entrar from './pages/Entrar'
+import Paciente from './pages/Paciente'
 
 function NotFound() {
   return (
@@ -8,7 +9,7 @@ function NotFound() {
       <h1 className="text-xl font-semibold text-slate-900">
         Página no encontrada
       </h1>
-      <Link className="text-sky-600 underline" to="/">
+      <Link className="text-teal-700 underline" to="/">
         Volver al inicio
       </Link>
     </main>
@@ -19,7 +20,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/entrar" element={<Entrar />} />
+      <Route path="/paciente" element={<Paciente />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
