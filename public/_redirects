@@ -1,0 +1,4 @@
+# SPA fallback: serve index.html for any path that isn't a real static file,
+# so client-side routes (/entrar, /paciente, ...) load instead of 404ing.
+# Real files (assets, favicon) are served first; this only catches the rest.
+/*    /index.html   200
