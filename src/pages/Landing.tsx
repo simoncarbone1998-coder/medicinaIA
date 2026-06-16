@@ -1,5 +1,6 @@
 import { Link, Navigate } from 'react-router-dom'
-import { useSession } from '../lib/useSession'
+import { useProfile } from '../lib/useProfile'
+import { homePathForProfile } from '../lib/auth'
 
 /* Fotos reales (Pexels, uso libre):
    - Hero:    https://www.pexels.com/photo/6697318/
@@ -164,7 +165,7 @@ function Benefit({
 
 /* ---------- Página ---------- */
 export default function Landing() {
-  const { session, loading } = useSession()
+  const { session, profile, loading } = useProfile()
 
   if (loading) {
     return (
@@ -174,9 +175,9 @@ export default function Landing() {
     )
   }
 
-  // Página pública: con sesión activa, al espacio del paciente.
+  // Página pública: con sesión activa, al espacio que corresponde por rol.
   if (session) {
-    return <Navigate to="/paciente" replace />
+    return <Navigate to={homePathForProfile(profile)} replace />
   }
 
   const primaryBtn =
@@ -191,13 +192,13 @@ export default function Landing() {
         <Wordmark className="text-2xl text-brand-800" />
         <nav className="flex items-center gap-2 sm:gap-3">
           <Link
-            to="/entrar?modo=entrar"
+            to="/login"
             className="rounded-full px-4 py-2 text-sm font-semibold text-stone-600 transition-colors hover:text-brand-700"
           >
             Iniciar sesión
           </Link>
           <Link
-            to="/entrar?modo=crear"
+            to="/registro"
             className="hidden rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
           >
             Crear cuenta
@@ -220,11 +221,11 @@ export default function Landing() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/entrar?modo=crear" className={primaryBtn}>
+              <Link to="/registro" className={primaryBtn}>
                 Crear cuenta
                 <IconArrow className="h-5 w-5" />
               </Link>
-              <Link to="/entrar?modo=entrar" className={secondaryBtn}>
+              <Link to="/login" className={secondaryBtn}>
                 Iniciar sesión
               </Link>
             </div>
@@ -402,14 +403,14 @@ export default function Landing() {
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                to="/entrar?modo=crear"
+                to="/registro"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-base font-semibold text-brand-800 shadow-sm transition-colors hover:bg-sand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-800"
               >
                 Crear cuenta
                 <IconArrow className="h-5 w-5" />
               </Link>
               <Link
-                to="/entrar?modo=entrar"
+                to="/login"
                 className="inline-flex items-center justify-center rounded-full border border-white/30 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white/10"
               >
                 Iniciar sesión
@@ -435,12 +436,12 @@ export default function Landing() {
               <h3 className="text-sm font-semibold text-stone-900">Producto</h3>
               <ul className="mt-3 space-y-2 text-sm text-stone-600">
                 <li>
-                  <Link to="/entrar?modo=crear" className="hover:text-brand-700">
+                  <Link to="/registro" className="hover:text-brand-700">
                     Crear cuenta
                   </Link>
                 </li>
                 <li>
-                  <Link to="/entrar?modo=entrar" className="hover:text-brand-700">
+                  <Link to="/login" className="hover:text-brand-700">
                     Iniciar sesión
                   </Link>
                 </li>
