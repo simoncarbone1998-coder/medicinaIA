@@ -133,3 +133,114 @@ export function FormError({ message }: { message: string }) {
     </p>
   )
 }
+
+// Bloque de carga (skeleton) gris con animación de pulso.
+export function Skeleton({ className = '' }: { className?: string }) {
+  return <div className={`animate-pulse rounded-xl bg-sand-200 ${className}`} />
+}
+
+// Ventana modal centrada con fondo oscurecido y botón de cierre.
+export function Modal({
+  title,
+  onClose,
+  children,
+}: {
+  title?: string
+  onClose: () => void
+  children: ReactNode
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-stone-900/40 p-0 sm:items-center sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-white p-6 shadow-xl sm:rounded-3xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-stone-900">
+            {title}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="-mr-1 -mt-1 rounded-full p-1.5 text-stone-400 transition-colors hover:bg-sand-100 hover:text-stone-700"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+// Variantes de botón reutilizables (pill).
+const btnBase =
+  'inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+
+export function PrimaryButton({
+  className = '',
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      className={`${btnBase} bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-600 ${className}`}
+      {...props}
+    />
+  )
+}
+
+export function SecondaryButton({
+  className = '',
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      className={`${btnBase} border border-sand-300 bg-white text-stone-700 hover:bg-sand-100 focus-visible:ring-brand-600 ${className}`}
+      {...props}
+    />
+  )
+}
+
+export function DangerButton({
+  className = '',
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      className={`${btnBase} border border-red-200 bg-white text-red-700 hover:bg-red-50 focus-visible:ring-red-500 ${className}`}
+      {...props}
+    />
+  )
+}
+
+// Avatar con iniciales a partir de un nombre.
+export function InitialsAvatar({
+  name,
+  className = '',
+}: {
+  name: string | null
+  className?: string
+}) {
+  const initials = (name ?? '?')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join('')
+  return (
+    <span
+      className={`flex shrink-0 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700 ${className}`}
+      aria-hidden="true"
+    >
+      {initials || '?'}
+    </span>
+  )
+}

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -8,6 +9,13 @@ import PacienteMiSalud from './pages/PacienteMiSalud'
 import DoctorAgenda from './pages/DoctorAgenda'
 import AdminDashboard from './pages/AdminDashboard'
 import RequireRole from './components/RequireRole'
+import { FullScreenLoader } from './components/ui'
+
+// Las páginas de videoconsulta cargan la librería de Daily.co (pesada): las
+// separamos en su propio chunk para no penalizar el flujo normal de reservas
+// en redes lentas.
+const PacienteConsulta = lazy(() => import('./pages/PacienteConsulta'))
+const DoctorConsulta = lazy(() => import('./pages/DoctorConsulta'))
 
 function NotFound() {
   return (
@@ -45,6 +53,16 @@ export default function App() {
         path="/paciente/dashboard"
         element={<Navigate to="/paciente/mi-salud" replace />}
       />
+      <Route
+        path="/paciente/consulta/:appointmentId"
+        element={
+          <RequireRole role="patient">
+            <Suspense fallback={<FullScreenLoader />}>
+              <PacienteConsulta />
+            </Suspense>
+          </RequireRole>
+        }
+      />
 
       {/* Médico (protegida, solo aprobados) */}
       <Route
@@ -52,6 +70,16 @@ export default function App() {
         element={
           <RequireRole role="doctor">
             <DoctorAgenda />
+          </RequireRole>
+        }
+      />
+      <Route
+        path="/doctor/consulta/:appointmentId"
+        element={
+          <RequireRole role="doctor">
+            <Suspense fallback={<FullScreenLoader />}>
+              <DoctorConsulta />
+            </Suspense>
           </RequireRole>
         }
       />
